@@ -1,5 +1,4 @@
 const express = require('express')
-const { route } = require('express/lib/application')
 const router = express.Router()
 const uuid = require('uuid')
 const users = require('./usersData')
@@ -30,6 +29,21 @@ router.post('/', (req, res)=>{// create a new user
 
     users.push(newUser)
     res.json(users)
+
+})
+
+router.put('/:id', (req, res) =>{// update a user
+    const foundUser = users.some(user => user.id === parseInt(req.params.id))
+    if(foundUser){
+        const updateUser = req.body;
+        users.forEach(user => {
+            if(user.id === parseInt(req.params.id)){
+                user.name = updateUser.name ? updateUser.name : user.name;
+                user.email = updateUser.email ? updateUser.email : user.email;
+                res.json({msg: 'User updated', user})
+            }
+        })
+    }
 
 })
 module.exports = router;
